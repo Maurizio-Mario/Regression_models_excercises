@@ -1,0 +1,78 @@
+---
+title: "Regression models - quizzes"
+author: "Maurizio Murino"
+date: "6 February 2016"
+output: html_document
+---
+
+## Quizz 1
+
+###1.1
+
+Consider the data set given below
+
+```{r1}
+x <- c(0.18, -1.54, 0.42, 0.95)
+```
+
+And weights given by
+
+```{r2}
+w <- c(2, 1, 3, 1)
+```
+
+Give the value of μ that minimizes the least squares equation
+$$∑n_i=1w_i(x_i−μ)2$$.
+
+__Solution:__
+
+```{r3}
+optim(mean(x), function(mu) sum(w * (x - mu)^2), method = "BFGS")$par
+```
+
+###1.2
+
+Consider the following data set
+
+``` {r 4}
+x <- c(0.8, 0.47, 0.51, 0.73, 0.36, 0.58, 0.57, 0.85, 0.44, 0.42)
+y <- c(1.39, 0.72, 1.55, 0.48, 1.19, -1.59, 1.23, -0.65, 1.49, 0.05)
+``` 
+
+Fit the regression through the origin and get the slope treating y
+as the outcome and x as the regressor. (Hint, do not center the data since we want regression through the origin, not through the means of the data.)
+
+__Solution:__
+
+```{r 5}
+lm(y ~ x -1)
+```
+
+###1.3
+
+Do `data(mtcars)` from the `datasets` package and fit the regression model with `mpg` as the outcome and `weight` as the predictor. Give the slope coefficient.
+
+```{r 6}
+library(datasets); data(mtcars)
+```
+
+__Solution:__
+
+```{r7}
+lm(mpg ~ wt, data = mtcars)
+```
+
+###1.4 [in progress]
+
+Consider data with an outcome (Y) and a predictor (X). The standard deviation of the predictor is one half that of the outcome. The correlation between the two variables is .5. What value would the slope coefficient for the regression model with Y as the outcome and X as the predictor?
+
+y = x
+sx^2 = 1/2sy^2
+cor(x,y) = 0.5x
+```{r 8}
+set.seed(123)
+a <- rnorm(100, 0, 1)
+b <- rnorm(100, 0, 0.5)
+lm(a ~ b)
+cor(a, b)
+```
