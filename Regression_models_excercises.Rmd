@@ -62,17 +62,104 @@ __Solution:__
 lm(mpg ~ wt, data = mtcars)
 ```
 
-###1.4 [in progress]
+###1.4
 
 Consider data with an outcome (Y) and a predictor (X). The standard deviation of the predictor is one half that of the outcome. The correlation between the two variables is .5. What value would the slope coefficient for the regression model with Y as the outcome and X as the predictor?
 
-y = x
-sx^2 = 1/2sy^2
-cor(x,y) = 0.5x
-```{r 8}
-set.seed(123)
-a <- rnorm(100, 0, 1)
-b <- rnorm(100, 0, 0.5)
-lm(a ~ b)
-cor(a, b)
+__Solution:__
+
+```{r 8 q1.4}
+sy <- 1
+sx <- 1/2*sy
+cor <- 0.5
+cor*sy/sx
 ```
+
+###1.5
+
+Students were given two hard tests and scores were normalized to have empirical mean 0 and variance 1. The correlation between the scores on the two tests was 0.4. What would be the expected score on Quiz 2 for a student who had a normalized score of 1.5 on Quiz 1?
+
+__Solution:__
+```{r q1.5}
+1.5*0.4
+```
+
+###1.6
+
+Consider the data given by the following
+
+```{r n}
+x <- c(8.58, 10.46, 9.01, 9.64, 8.86)
+```
+What is the value of the first measurement if x were normalized (to have mean 0 and variance 1)?
+
+__Solution:__
+
+```{r 10}
+normx <- (x - mean(x)) / sd(x)
+normx[1]
+```
+
+###1.7
+
+Consider the following data set (used above as well). 
+
+```{r11}
+x <- c(0.8, 0.47, 0.51, 0.73, 0.36, 0.58, 0.57, 0.85, 0.44, 0.42)
+y <- c(1.39, 0.72, 1.55, 0.48, 1.19, -1.59, 1.23, -0.65, 1.49, 0.05)
+```
+
+What is the intercept for fitting the model with x as the predictor and y as the outcome?
+
+__Solution:__
+
+``` {r q1.7}
+summary(lm(y ~ x))
+```
+
+###1.8
+
+You know that both the predictor and response have mean 0. What
+can be said about the intercept when you fit a linear regression?
+
+```{r q1.8}
+x <- rnorm(100)
+y <- rnorm(100)
+summary(lm(x ~ y))
+```
+
+__Solution:__
+
+It must be/close to 0.
+
+###1.9
+
+Consider the data given by
+
+```{r q1.9}
+x <- c(0.8, 0.47, 0.51, 0.73, 0.36, 0.58, 0.57, 0.85, 0.44, 0.42)
+```
+
+What value minimizes the sum of the squared distances between these points and itself?
+
+__Solution:__
+
+$$∑n_i=(x_i−μ)^2$$
+
+```{r q1.9b}
+optim(mean(x), function(mu) sum((x - mu)^2), method = "BFGS")$par
+```
+
+
+
+###1.10
+
+Let the slope having fit Y as the outcome and X as the predictor be denoted as β1. Let the slope from fitting X as the outcome and Y as the predictor be denoted as γ1. Suppose that you divide β1 by γ1; in other words consider β1/γ1. What is this ratio always equal to?
+
+__Solution:__
+
+Beta1  = Cor(Y, X) * SD(Y) / SD(X)
+Gamma1 = Cor(X, Y) * SD(X) / SD(Y)
+Beta1/Gamma1 = Cor(Y, X) / Cor(X, Y) * SD(Y)^2 / SD(X)^2
+             = 1 * Var(Y) / Var(X)
+             = Var(Y) / Var(X)
