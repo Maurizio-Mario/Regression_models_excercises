@@ -170,6 +170,7 @@ Beta1/Gamma1 = Cor(Y, X) / Cor(X, Y) * SD(Y)^2 / SD(X)^2
 ## Test 2
 
 ###2.1 
+
 Consider the following data with x as the predictor and y as as the outcome.
 
 ```{r 2.1a}
@@ -191,7 +192,8 @@ mycoef
 round(mycoef, 3)[8]
 ```
 
-2. 
+###2.2
+ 
 Consider the previous problem, give the estimate of the residual standard deviation.
 
 The residual standard deviation is given by $$s_res = √(∑(Y - Y_est)^2/(n - 2))$$
@@ -200,31 +202,77 @@ The residual standard deviation is given by $$s_res = √(∑(Y - Y_est)^2/(n - 
 round(summary(myfit)$sigma, 3)
 ```
 
-3. 
+###2.3 
+
 In the mtcars data set, fit a linear regression model of weight (predictor) on mpg (outcome). Get a 95% confidence interval for the expected mpg at the average weight. What is the lower endpoint?
 
-4. 
+__Solution:__
+
+```{r 2.3a}
+data(mtcars)
+y <- mtcars$mpg
+x <- mtcars$wt
+myfit2 <- lm(y ~ x, data = mtcars)
+round(predict(myfit2,data.frame(x=mean(x)), interval="confidence"), 3)
+```
+
+###2.4
+
 Refer to the previous question. Read the help file for mtcars. What is the weight coefficient interpreted as?
 
-5. 
+__Solution:__
+
+The estimated expected change in mpg per 1,000 lb increase in weight.
+
+###2.5
+
 Consider again the mtcars data set and a linear regression model with mpg as predicted by weight (1,000 lbs). A new car is coming weighing 3000 pounds. Construct a 95% prediction interval for its mpg. What is the upper endpoint?
 
-6. 
-Consider again the mtcars data set and a linear regression model with mpg as predicted by weight (in 1,000 lbs). A “short” ton is defined as 2,000 lbs. Construct a 95% confidence interval for the expected change in mpg per 1 short ton increase in weight. Give the lower endpoint.
+__Solution:__
 
-7. 
+```{r 2.5a}
+round(predict(myfit2, data.frame(x = 3), interval = ("prediction")), 3)
+```
+
+###2.6
+
+Consider again the `mtcars` data set and a linear regression model with `mpg` as predicted by weight (in 1,000 lbs). A “short” ton is defined as 2,000 lbs. Construct a 95% confidence interval for the expected change in mpg per 1 short ton increase in weight. Give the lower endpoint.
+
+__solution:__
+
+```{r 2.6a}
+myfit3 <- lm(y ~ I(x/2))
+mycoef3 <- coef(summary(myfit3))
+round((mycoef3[2,1] + c(-1, 1) * qt(.975, df = myfit3$df) * mycoef3[2, 2]), 3)
+```
+
+### 2.7 
 If my X from a linear regression is measured in centimeters and I convert it to meters what would happen to the slope coefficient?
 
-8. 
+__Solution:__
+
+It would remain unaltered.
+
+###2.8
+
 I have an outcome, Y, and a predictor, X and fit a linear regression model with Y=β0+β1X+ϵ to obtain β^0 and β^1. What would be the consequence to the subsequent slope and intercept if I were to refit the model with a new regressor, X+c for some constant, c?
 
-9. 
+__Solution:__
+
+The new intercept would be  $β^0 − cβ^1$.
+
+###2.9
+
 Refer back to the mtcars data set with mpg as an outcome and weight (wt) as the predictor. About what is the ratio of the the sum of the squared errors, ∑ni=1(Yi−Y^i)2 when comparing a model with just an intercept (denominator) to the model with the intercept and slope (numerator)?
 
-10. 
+__Solution:__
+
+$Yi^=Y¯Yi^=Y¯$ when the fitted model has an intercept only.
+
+###2.10
+
 Do the residuals always have to sum to 0 in linear regression?
 
------------------------------------------------------------------
+__Solution:__
 
-# Textbook excercises
-
+If an intercept is included: yes.

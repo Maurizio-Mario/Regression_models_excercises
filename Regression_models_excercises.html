@@ -174,16 +174,16 @@ summary(lm(x ~ y))</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -2.31140 -0.74015  0.05218  0.79056  2.12622 
+## -2.15419 -0.54396 -0.00136  0.63044  2.18487 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept) -0.13264    0.09615  -1.379    0.171
-## y            0.15377    0.09977   1.541    0.126
+## (Intercept) -0.10105    0.09551  -1.058    0.293
+## y            0.08080    0.09874   0.818    0.415
 ## 
-## Residual standard error: 0.9614 on 98 degrees of freedom
-## Multiple R-squared:  0.02367,    Adjusted R-squared:  0.0137 
-## F-statistic: 2.375 on 1 and 98 DF,  p-value: 0.1265</code></pre>
+## Residual standard error: 0.9519 on 98 degrees of freedom
+## Multiple R-squared:  0.006787,   Adjusted R-squared:  -0.003347 
+## F-statistic: 0.6697 on 1 and 98 DF,  p-value: 0.4151</code></pre>
 <p><strong>Solution:</strong></p>
 <p>It must be/close to 0.</p>
 </div>
@@ -223,27 +223,73 @@ mycoef</code></pre>
 <pre class="r"><code># The the pvalue is:
 round(mycoef, 3)[8]</code></pre>
 <pre><code>## [1] 0.053</code></pre>
-<ol start="2" style="list-style-type: decimal">
-<li>Consider the previous problem, give the estimate of the residual standard deviation.</li>
-</ol>
+</div>
+<div id="section-11" class="section level3">
+<h3>2.2</h3>
+<p>Consider the previous problem, give the estimate of the residual standard deviation.</p>
 <p>The residual standard deviation is given by <span class="math">\[s_res = √(∑(Y - Y_est)^2/(n - 2))\]</span></p>
 <pre class="r"><code>round(summary(myfit)$sigma, 3)</code></pre>
 <pre><code>## [1] 0.223</code></pre>
-<ol start="3" style="list-style-type: decimal">
-<li><p>In the mtcars data set, fit a linear regression model of weight (predictor) on mpg (outcome). Get a 95% confidence interval for the expected mpg at the average weight. What is the lower endpoint?</p></li>
-<li><p>Refer to the previous question. Read the help file for mtcars. What is the weight coefficient interpreted as?</p></li>
-<li><p>Consider again the mtcars data set and a linear regression model with mpg as predicted by weight (1,000 lbs). A new car is coming weighing 3000 pounds. Construct a 95% prediction interval for its mpg. What is the upper endpoint?</p></li>
-<li><p>Consider again the mtcars data set and a linear regression model with mpg as predicted by weight (in 1,000 lbs). A “short” ton is defined as 2,000 lbs. Construct a 95% confidence interval for the expected change in mpg per 1 short ton increase in weight. Give the lower endpoint.</p></li>
-<li><p>If my X from a linear regression is measured in centimeters and I convert it to meters what would happen to the slope coefficient?</p></li>
-<li><p>I have an outcome, Y, and a predictor, X and fit a linear regression model with Y=β0+β1X+ϵ to obtain β^0 and β^1. What would be the consequence to the subsequent slope and intercept if I were to refit the model with a new regressor, X+c for some constant, c?</p></li>
-<li><p>Refer back to the mtcars data set with mpg as an outcome and weight (wt) as the predictor. About what is the ratio of the the sum of the squared errors, ∑ni=1(Yi−Y^i)2 when comparing a model with just an intercept (denominator) to the model with the intercept and slope (numerator)?</p></li>
-<li><p>Do the residuals always have to sum to 0 in linear regression?</p></li>
-</ol>
-<hr />
 </div>
+<div id="section-12" class="section level3">
+<h3>2.3</h3>
+<p>In the mtcars data set, fit a linear regression model of weight (predictor) on mpg (outcome). Get a 95% confidence interval for the expected mpg at the average weight. What is the lower endpoint?</p>
+<p><strong>Solution:</strong></p>
+<pre class="r"><code>data(mtcars)
+y &lt;- mtcars$mpg
+x &lt;- mtcars$wt
+myfit2 &lt;- lm(y ~ x, data = mtcars)
+round(predict(myfit2,data.frame(x=mean(x)), interval=&quot;confidence&quot;), 3)</code></pre>
+<pre><code>##      fit    lwr   upr
+## 1 20.091 18.991 21.19</code></pre>
 </div>
-<div id="textbook-excercises" class="section level1">
-<h1>Textbook excercises</h1>
+<div id="section-13" class="section level3">
+<h3>2.4</h3>
+<p>Refer to the previous question. Read the help file for mtcars. What is the weight coefficient interpreted as?</p>
+<p><strong>Solution:</strong></p>
+<p>The estimated expected change in mpg per 1,000 lb increase in weight.</p>
+</div>
+<div id="section-14" class="section level3">
+<h3>2.5</h3>
+<p>Consider again the mtcars data set and a linear regression model with mpg as predicted by weight (1,000 lbs). A new car is coming weighing 3000 pounds. Construct a 95% prediction interval for its mpg. What is the upper endpoint?</p>
+<p><strong>Solution:</strong></p>
+<pre class="r"><code>round(predict(myfit2, data.frame(x = 3), interval = (&quot;prediction&quot;)), 3)</code></pre>
+<pre><code>##      fit   lwr    upr
+## 1 21.252 14.93 27.574</code></pre>
+</div>
+<div id="section-15" class="section level3">
+<h3>2.6</h3>
+<p>Consider again the <code>mtcars</code> data set and a linear regression model with <code>mpg</code> as predicted by weight (in 1,000 lbs). A “short” ton is defined as 2,000 lbs. Construct a 95% confidence interval for the expected change in mpg per 1 short ton increase in weight. Give the lower endpoint.</p>
+<p><strong>solution:</strong></p>
+<pre class="r"><code>myfit3 &lt;- lm(y ~ I(x/2))
+mycoef3 &lt;- coef(summary(myfit3))
+round((mycoef3[2,1] + c(-1, 1) * qt(.975, df = myfit3$df) * mycoef3[2, 2]), 3)</code></pre>
+<pre><code>## [1] -12.973  -8.405</code></pre>
+</div>
+<div id="section-16" class="section level3">
+<h3>2.7</h3>
+<p>If my X from a linear regression is measured in centimeters and I convert it to meters what would happen to the slope coefficient?</p>
+<p><strong>Solution:</strong></p>
+<p>It would remain unaltered.</p>
+</div>
+<div id="section-17" class="section level3">
+<h3>2.8</h3>
+<p>I have an outcome, Y, and a predictor, X and fit a linear regression model with Y=β0+β1X+ϵ to obtain β^0 and β^1. What would be the consequence to the subsequent slope and intercept if I were to refit the model with a new regressor, X+c for some constant, c?</p>
+<p><strong>Solution:</strong></p>
+<p>The new intercept would be <span class="math">\(β^0 − cβ^1\)</span>.</p>
+</div>
+<div id="section-18" class="section level3">
+<h3>2.9</h3>
+<p>Refer back to the mtcars data set with mpg as an outcome and weight (wt) as the predictor. About what is the ratio of the the sum of the squared errors, ∑ni=1(Yi−Y^i)2 when comparing a model with just an intercept (denominator) to the model with the intercept and slope (numerator)?</p>
+<p><strong>Solution:</strong></p>
+<p><span class="math">\(Yi^=Y¯Yi^=Y¯\)</span> when the fitted model has an intercept only.</p>
+</div>
+<div id="section-19" class="section level3">
+<h3>2.10</h3>
+<p>Do the residuals always have to sum to 0 in linear regression?</p>
+<p><strong>Solution:</strong></p>
+<p>If an intercept is included: yes.</p>
+</div>
 </div>
 
 
