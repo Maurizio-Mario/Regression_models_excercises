@@ -251,7 +251,7 @@ If my X from a linear regression is measured in centimeters and I convert it to 
 
 __Solution:__
 
-It would remain unaltered.
+It would remain unaltered, it would change the decimal place.
 
 ###2.8
 
